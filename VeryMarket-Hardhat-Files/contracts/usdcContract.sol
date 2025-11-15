@@ -63,20 +63,20 @@ contract SomniaUSDC {
         return true;
     }
 
-    // 🔓 Owner withdraws collected HBAR
+    // 🔓 Owner withdraws collected STT
     function withdraw() external onlyOwner {
         uint balance = address(this).balance;
-        require(balance > 0, "No HBAR to withdraw");
+        require(balance > 0, "No STT to withdraw");
         payable(owner).transfer(balance);
         emit Withdrawn(balance);
     }
 
-    // 🔎 View contract HBAR balance
+    // 🔎 View contract STT balance
     function contractBalance() external view returns (uint) {
         return address(this).balance;
     }
 
-    // ✅ Accept HBAR sent directly to contract
+    // ✅ Accept STT sent directly to contract
     receive() external payable {}
 
     fallback() external payable {}
