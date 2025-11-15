@@ -14,9 +14,9 @@ import AnalyticsTab from "./AnalyticsTab";
 
 // Token metadata
 const TOKEN_LOGOS = {
-  "0xA3b05E5Fe445F34E2F14683430F5eB6Cc5EE81B0": { logo: "/images/usdc.png", name: "USDC" },
-  "0x79f0da8c3265C99655bC1d1B5E0A2E530d3a0306": { logo: "/images/tether.png", name: "USDT" },
-  "0x0628D6F7D69546C9a520e583968A1aaFe530A99A": { logo: "/images/dai.png", name: "DAI" },
+  "0xb350f8C86c67c284AD242BA24670Ed93040E8587": { logo: "/images/usdc.png", name: "USDC" },
+  "0xE050BDb451FF428A2AF98934bBDEcCfCd0323201": { logo: "/images/tether.png", name: "USDT" },
+  "0xC252fcA6BA26f1eC09F2890776fFB426E0B50F0b": { logo: "/images/dai.png", name: "DAI" },
   // "0x0000000000000000000000000000000000000000": { logo: "/images/somnia.png", name: "STT" },
 };
  

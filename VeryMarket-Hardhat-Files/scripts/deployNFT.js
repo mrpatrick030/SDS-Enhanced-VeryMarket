@@ -5,7 +5,7 @@ async function main() {
   console.log("Deploying ReceiptNFT with owner:", deployer.address);
 
   const ReceiptNFT = await hre.ethers.getContractFactory("ReceiptNFT");
-  const receiptNFT = await ReceiptNFT.deploy("0xB13C1A2628CC64a4bBdc2f31581A4EF8aF8198Eb", deployer.address);
+  const receiptNFT = await ReceiptNFT.deploy("0x0562eEB4Cd1AF649ffa18f4f3a1A50F2D7899f6e", deployer.address);
   await receiptNFT.waitForDeployment();
   const address = await receiptNFT.getAddress();
 

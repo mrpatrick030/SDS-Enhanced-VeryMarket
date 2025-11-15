@@ -1368,7 +1368,6 @@ useEffect(() => {
 
   {/* Buyer Actions */}
   {selected.seller?.toLowerCase() !== address?.toLowerCase() &&
-    selected.status === 1 &&
     selected.quantity > 0 && (
       <motion.button
         whileTap={{ scale: 0.95 }}

@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 
 // Deployed contract addresses & ABIs
-export const MARKETPLACE_ADDRESS = "0xB13C1A2628CC64a4bBdc2f31581A4EF8aF8198Eb";
+export const MARKETPLACE_ADDRESS = "0x0562eEB4Cd1AF649ffa18f4f3a1A50F2D7899f6e";
 export const MARKETPLACE_ABI = [
   {
     inputs: [
@@ -3273,10 +3273,10 @@ export const USDC_ABI = [
     type: "receive",
   },
 ];
-export const USDC_ADDRESS = "0xA3b05E5Fe445F34E2F14683430F5eB6Cc5EE81B0";
-export const USDT_ADDRESS = "0x79f0da8c3265C99655bC1d1B5E0A2E530d3a0306";
-export const DAI_ADDRESS = "0x0628D6F7D69546C9a520e583968A1aaFe530A99A";
-export const NFT_ADDRESS = "0x5c3AfA1c02E89EDf6D0090C2Cb91c58283150a27";
+export const USDC_ADDRESS = "0xb350f8C86c67c284AD242BA24670Ed93040E8587";
+export const USDT_ADDRESS = "0xE050BDb451FF428A2AF98934bBDEcCfCd0323201";
+export const DAI_ADDRESS = "0xC252fcA6BA26f1eC09F2890776fFB426E0B50F0b";
+export const NFT_ADDRESS = "0xf86470d61b01aE6546C08814ACeec442E42625Dc";
 export const NFT_ABI = [
   {
     inputs: [
