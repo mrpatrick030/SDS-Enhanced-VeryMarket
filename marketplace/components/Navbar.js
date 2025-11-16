@@ -5,6 +5,7 @@ import { BrowserProvider, Contract, formatUnits, parseUnits } from "ethers";
 import { MARKETPLACE_ADDRESS, MARKETPLACE_ABI } from "../lib/contract";
 import { Sun, Moon } from "lucide-react";
 import { useRouter } from "next/navigation";
+import ConnectButton from "@/context/walletConnect";
 
 export default function Navbar({ activeTab, setActiveTab, darkMode, setDarkMode, TOKEN_LOGOS }) {
   const { address, caipAddress, isConnected } = useAppKitAccount();
@@ -69,7 +70,7 @@ export default function Navbar({ activeTab, setActiveTab, darkMode, setDarkMode,
     <nav className="bg-white dark:bg-gray-800 shadow rounded-xl p-4 mb-6">
       {/* Top Row */}
       <div className="flex justify-between items-center">
-        <img onClick={(e) => {router.push("/")}} src="images/VeryMarketLogo.png" alt="" width="130" className="inline-block" />
+        <img onClick={(e) => {router.push("/")}} src="images/VeryMarketLogo.png" alt="" width="130" className="inline-block cursor-pointer" />
 
         {/* Hamburger (mobile only) */}
         <button
@@ -128,7 +129,7 @@ export default function Navbar({ activeTab, setActiveTab, darkMode, setDarkMode,
           </div>
 
           {/* Wallet + Dark mode */}
-          <appkit-button />
+          <ConnectButton />
           
           <button
             onClick={handleToggle}
@@ -202,7 +203,7 @@ export default function Navbar({ activeTab, setActiveTab, darkMode, setDarkMode,
           </div>
 
           {/* Wallet + Dark mode */}
-           <appkit-button />
+           <ConnectButton />
 
 <button
   onClick={handleToggle}

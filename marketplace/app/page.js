@@ -1,11 +1,12 @@
 "use client";
-import Navbar from "@/components/Navbar";
+
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useAppKitProvider, useAppKitAccount } from "@reown/appkit/react";
 import { BrowserProvider, Contract, formatUnits } from "ethers";
 import { MARKETPLACE_ADDRESS, MARKETPLACE_ABI } from "../lib/contract";
 import Link from "next/link";
+import ConnectButton from "@/context/walletConnect";
 
 export default function Home() {
   const { address, caipAddress, isConnected } = useAppKitAccount();
@@ -80,7 +81,7 @@ export default function Home() {
       <div className="absolute inset-0 bg-black/40 z-0" />
 
      <div className="mt-[0.5cm] mb-[1cm] px-[1cm] flex justify-end">
-      <appkit-button />
+      <ConnectButton />
      </div>
 
       {/* Intro */}
