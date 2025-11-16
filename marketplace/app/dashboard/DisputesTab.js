@@ -191,11 +191,15 @@ const paginated = useMemo(() => {
   useEffect(() => {
     if (contract) loadDisputes();
     setRefresh(true)
-      // update every 120s
-    const interval = setInterval(() => {
-      loadDisputes();
-    }, 120000)
-    return () => clearInterval(interval);
+
+    // Real-time event listeners
+    contract.on("DisputeOpened", loadDisputes);
+    contract.on("DisputeCancelled", loadDisputes);
+    contract.on("DisputeResolved", loadDisputes);
+    contract.on("ReceiptMinted", loadDisputes);
+    return () => {
+      contract.removeAllListeners();
+    };
   }, [contract]);
 
   // helpers: confirm modal

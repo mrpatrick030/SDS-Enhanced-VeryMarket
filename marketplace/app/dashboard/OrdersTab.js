@@ -125,11 +125,26 @@ const dropdownRef = useRef(null);
     if (!contract) return;
     loadOrders();
     setRefresh(true)
-      // update every 120s
-    const interval = setInterval(() => {
-      loadOrders();
-    }, 120000)
-    return () => clearInterval(interval);
+
+    // Real-time event listeners
+    contract.on("OrderRequested", loadOrders);
+    contract.on("ShippingSet", loadOrders);
+    contract.on("MarkedShipped", loadOrders);
+    contract.on("OrderConfirmedAndPaid", loadOrders);
+
+    contract.on("DeliveryConfirmed", loadOrders);
+    contract.on("Refunded", loadOrders);
+    contract.on("OrderCancelledBySeller", loadOrders);
+    contract.on("OrderCanceledByBuyer", loadOrders);
+
+    contract.on("DisputeOpened", loadOrders);
+    contract.on("DisputeCancelled", loadOrders);
+    contract.on("DisputeResolved", loadOrders);
+    contract.on("SellerRated", loadOrders);
+    contract.on("ReceiptMinted", loadOrders);
+    return () => {
+      contract.removeAllListeners();
+    };
   }, [contract, address]);
 
   // Dropdown outside click close
