@@ -141,13 +141,20 @@ useEffect(() => {
   useEffect(() => {
     if (!contract) return;
     loadActiveListings();
-
-        setRefresh(true)
-      // update every 120s
-    const interval = setInterval(() => {
-      loadActiveListings();
-    }, 120000)
-    return () => clearInterval(interval);
+       
+    setRefresh(true)
+    // Real-time event listeners
+    contract.on("ListingCreated", loadActiveListings);
+    contract.on("StoreUpdated", loadActiveListings);
+    contract.on("ListingUpdated", loadActiveListings);
+    contract.on("ListingCanceled", loadActiveListings);
+    contract.on("ListingDeactivated", loadActiveListings);
+    contract.on("ListingReactivated", loadActiveListings);
+    contract.on("OrderRequested", loadActiveListings);
+    contract.on("TokenApproved", loadActiveListings);
+    return () => {
+      contract.removeAllListeners();
+    };
   }, [contract, address]);
 
     //pagination
@@ -452,14 +459,22 @@ const [itemsPerPage] = useState(10);
   };
 
   useEffect(() => {
-    if (contract) fetchSellerListings();
+    if (!contract) return;
+     fetchSellerListings();
 
         setRefresh(true)
-      // update every 120s
-    const interval = setInterval(() => {
-      fetchSellerListings();
-    }, 120000)
-    return () => clearInterval(interval);
+    // Real-time event listeners
+    contract.on("ListingCreated", fetchSellerListings);
+    contract.on("StoreUpdated", fetchSellerListings);
+    contract.on("ListingUpdated", fetchSellerListings);
+    contract.on("ListingCanceled", fetchSellerListings);
+    contract.on("ListingDeactivated", fetchSellerListings);
+    contract.on("ListingReactivated", fetchSellerListings);
+    contract.on("OrderRequested", fetchSellerListings);
+    contract.on("TokenApproved", fetchSellerListings);
+    return () => {
+      contract.removeAllListeners();
+    };
   }, [contract, profileSeller]);
 
 // --- Pagination helpers ---
@@ -486,7 +501,6 @@ const [store, setStore] = useState(null);
 const [loadingStore, setLoadingStore] = useState(false);
 
 // Fetch store details
-useEffect(() => {
   const fetchStore = async () => {
     if (!contract || !profileSeller) return;
       if (refresh === false) {
@@ -515,15 +529,24 @@ useEffect(() => {
     }
   };
 
-  fetchStore();
+useEffect(() => {
+      if (!contract) return;
+     fetchStore();
 
         setRefresh(true)
-      // update every 120s
-    const interval = setInterval(() => {
-      fetchStore();
-    }, 120000)
-    return () => clearInterval(interval);
-}, [contract, profileSeller]);
+    // Real-time event listeners
+    contract.on("ListingCreated", fetchStore);
+    contract.on("StoreUpdated", fetchStore);
+    contract.on("ListingUpdated", fetchStore);
+    contract.on("ListingCanceled", fetchStore);
+    contract.on("ListingDeactivated", fetchStore);
+    contract.on("ListingReactivated", fetchStore);
+    contract.on("OrderRequested", fetchStore);
+    contract.on("TokenApproved", fetchStore);
+    return () => {
+      contract.removeAllListeners();
+    };
+}, [contract, profileSeller])
 
 
 //for chat with store owner
@@ -538,7 +561,6 @@ useEffect(() => {
   const [myStore, setMyStore] = useState(null);
   const [loadingMyStore, setLoadingMyStore] = useState(false);
 
-  useEffect(() => {
   const fetchMyStore = async () => {
     if (!contract || !address) return;
       if (refresh === false) {
@@ -567,15 +589,24 @@ useEffect(() => {
     }
   };
 
-  fetchMyStore();
+useEffect(() => {
+      if (!contract) return;
+     fetchMyStore();
 
-   setRefresh(true)
-    // update every 120s
-    const interval = setInterval(() => {
-      fetchMyStore();
-    }, 120000)
-    return () => clearInterval(interval);
-}, [contract, address]);
+        setRefresh(true)
+    // Real-time event listeners
+    contract.on("ListingCreated", fetchMyStore);
+    contract.on("StoreUpdated", fetchMyStore);
+    contract.on("ListingUpdated", fetchMyStore);
+    contract.on("ListingCanceled", fetchMyStore);
+    contract.on("ListingDeactivated", fetchMyStore);
+    contract.on("ListingReactivated", fetchMyStore);
+    contract.on("OrderRequested", fetchMyStore);
+    contract.on("TokenApproved", fetchMyStore);
+    return () => {
+      contract.removeAllListeners();
+    };
+}, [contract, address])
 
 //for the filter dropdown
   const [dropdownOpen, setDropdownOpen] = useState(false);
