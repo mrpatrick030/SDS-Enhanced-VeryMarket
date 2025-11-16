@@ -129,14 +129,12 @@ const dropdownRef = useRef(null);
     // Real-time event listeners
     contract.on("OrderRequested", loadOrders);
     contract.on("ShippingSet", loadOrders);
-    contract.on("MarkedShipped", loadOrders);
     contract.on("OrderConfirmedAndPaid", loadOrders);
-
+    contract.on("MarkedShipped", loadOrders);
     contract.on("DeliveryConfirmed", loadOrders);
     contract.on("Refunded", loadOrders);
     contract.on("OrderCancelledBySeller", loadOrders);
     contract.on("OrderCanceledByBuyer", loadOrders);
-
     contract.on("DisputeOpened", loadOrders);
     contract.on("DisputeCancelled", loadOrders);
     contract.on("DisputeResolved", loadOrders);
