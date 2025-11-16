@@ -130,7 +130,7 @@ export default function Home() {
                 : "hover:scale-105"
             }`}
           >
-            <h3 className="text-4xl font-bold text-white">{stats.listings}</h3>
+            <h3 className="text-4xl font-bold text-white">{isConnected ? stats.listings : 0}</h3>
             <p className="mt-2 text-white/90">
               {stats.listings === 1 ? "Total Listing" : "Total Listings"}
             </p>
@@ -144,7 +144,7 @@ export default function Home() {
                 : "hover:scale-105"
             }`}
           >
-            <h3 className="text-4xl font-bold text-white">{stats.orders}</h3>
+            <h3 className="text-4xl font-bold text-white">{isConnected ? stats.orders : 0}</h3>
             <p className="mt-2 text-white/90">
               {stats.orders === 1 ? "Active Order" : "Active Orders"}
             </p>
@@ -158,7 +158,7 @@ export default function Home() {
                 : "hover:scale-105"
             }`}
           >
-            <h3 className="text-4xl font-bold text-white">{stats.disputes}</h3>
+            <h3 className="text-4xl font-bold text-white">{isConnected ? stats.disputes : 0}</h3>
             <p className="mt-2 text-white/90">
               {stats.disputes === 1 ? "Disputed Order" : "Disputed Orders"}
             </p>

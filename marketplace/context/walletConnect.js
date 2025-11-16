@@ -72,7 +72,7 @@ export default function ConnectButton() {
         onClick={handleButtonClick}
         className={`
           flex items-center gap-2 px-5 py-2 rounded-full cursor-pointer font-medium shadow-md
-          bg-gradient-to-r from-gray-900 to-gray-700
+          ${isConnected ? "bg-gradient-to-r from-blue-600 to-blue-900" : "bg-gradient-to-r from-gray-900 to-gray-700"}
           text-white w-auto justify-center
           transition-all duration-300
           ${isAnimating ? "scale-95" : "scale-100"}
