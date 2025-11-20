@@ -127,22 +127,22 @@ const dropdownRef = useRef(null);
     setRefresh(true)
 
     // Real-time event listeners
-    contract.on("OrderRequested", loadOrders);
-    contract.on("ShippingSet", loadOrders);
-    contract.on("OrderConfirmedAndPaid", loadOrders);
-    contract.on("MarkedShipped", loadOrders);
-    contract.on("DeliveryConfirmed", loadOrders);
-    contract.on("Refunded", loadOrders);
-    contract.on("OrderCancelledBySeller", loadOrders);
-    contract.on("OrderCanceledByBuyer", loadOrders);
-    contract.on("DisputeOpened", loadOrders);
-    contract.on("DisputeCancelled", loadOrders);
-    contract.on("DisputeResolved", loadOrders);
-    contract.on("SellerRated", loadOrders);
-    contract.on("ReceiptMinted", loadOrders);
-    return () => {
-      contract.removeAllListeners();
-    };
+    // contract.on("OrderRequested", loadOrders);
+    // contract.on("ShippingSet", loadOrders);
+    // contract.on("OrderConfirmedAndPaid", loadOrders);
+    // contract.on("MarkedShipped", loadOrders);
+    // contract.on("DeliveryConfirmed", loadOrders);
+    // contract.on("Refunded", loadOrders);
+    // contract.on("OrderCancelledBySeller", loadOrders);
+    // contract.on("OrderCanceledByBuyer", loadOrders);
+    // contract.on("DisputeOpened", loadOrders);
+    // contract.on("DisputeCancelled", loadOrders);
+    // contract.on("DisputeResolved", loadOrders);
+    // contract.on("SellerRated", loadOrders);
+    // contract.on("ReceiptMinted", loadOrders);
+    // return () => {
+    //   contract.removeAllListeners();
+    // };
   }, [contract, address]);
 
   // Dropdown outside click close
@@ -408,6 +408,20 @@ const openConfirmDelivery = (orderId, orderData, tokenName) => {
       "Open dispute for this order? Only buyer or seller can open a dispute.",
       async () => {
         await callTx("openDispute", orderId);
+
+        const res = await fetch("/api/somnia/publish", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+        eventName: "DisputeOpened",
+        payload: {
+        orderId: Number(orderId)
+     }
+  }),
+});
+
+const data = await res.json();
+console.log(data);
       }
     );
   };
@@ -419,6 +433,20 @@ const openConfirmDelivery = (orderId, orderData, tokenName) => {
       "Cancel this dispute only if there is a mutual agreement to cancel. Only the initiator of a dispute is allowed to cancel it.",
       async () => {
         await callTx("cancelDispute", orderId);
+
+        const res = await fetch("/api/somnia/publish", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+        eventName: "DisputeCancelled",
+        payload: {
+        orderId: Number(orderId)
+     }
+  }),
+});
+
+const data = await res.json();
+console.log(data);
       }
     );
   };

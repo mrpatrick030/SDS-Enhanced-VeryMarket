@@ -31,6 +31,7 @@ import InputModal from "./InputModal";
 import ChatModal from "./ChatModal";
 import { MARKETPLACE_ADDRESS, MARKETPLACE_ABI } from "../../lib/contract";
 import ViewReceiptModal from "./ViewReceiptModal";
+import SomniaDisputeListener from "@/scripts/listener";
 
 export default function DisputesTab({ pushToast, TOKEN_LOGOS = {}, STATUS = [], darkMode }) {
   const { address, caipAddress, isConnected } = useAppKitAccount();
@@ -189,18 +190,67 @@ const paginated = useMemo(() => {
   };
 
   useEffect(() => {
-    if (contract) loadDisputes();
-    setRefresh(true)
+    if (!contract) return;
+    loadDisputes();
+    setRefresh(true);
 
     // Real-time event listeners
-    contract.on("DisputeOpened", loadDisputes);
-    contract.on("DisputeCancelled", loadDisputes);
-    contract.on("DisputeResolved", loadDisputes);
-    contract.on("ReceiptMinted", loadDisputes);
-    return () => {
-      contract.removeAllListeners();
-    };
+    // contract.on("DisputeOpened", loadDisputes);
+    // contract.on("DisputeCancelled", loadDisputes);
+    // contract.on("DisputeResolved", loadDisputes);
+    // contract.on("ReceiptMinted", loadDisputes);
+    // return () => {
+    //   contract.removeAllListeners();
+    // };
   }, [contract]);
+
+
+  // Real-time updates via Somnia
+const handleSomniaEvent = (event) => {
+  console.log("Received Somnia event:", event);
+
+  const normalized = {
+    disputeId: event.data.disputeId || event.data.orderId,
+    buyer: event.data.buyer || event.data.raisedBy,
+    seller: event.data.seller || null,
+    status: event.schemaName === "DisputeOpened" ? "Open" : event.data.status || "Updated",
+    receipt: event.data.receipt || null,
+  };
+
+  switch(event.schemaName) {
+    case "DisputeOpened":
+      setDisputes(prev => [normalized, ...prev]);
+      break;
+    case "DisputeCancelled":
+    case "DisputeResolved":
+      setDisputes(prev =>
+        prev.map(d => d.disputeId === normalized.disputeId ? { ...d, ...normalized } : d)
+      );
+      break;
+    case "ReceiptMinted":
+      setDisputes(prev =>
+        prev.map(d => d.disputeId === normalized.disputeId ? { ...d, receipt: normalized } : d)
+      );
+      break;
+    default:
+      break;
+  }
+};
+
+
+  // Real-time updates via Somnia
+  // const handleSomniaEvent = (event) => {
+  //   console.log("Received Somnia event:", event);
+
+  //   // Refresh disputes when relevant events occur
+  //   if (
+  //     ["DisputeOpened", "DisputeCancelled", "DisputeResolved", "ReceiptMinted"].includes(event.schemaName)
+  //   ) {
+  //     loadDisputes();
+  //   }
+  // };
+
+
 
   // helpers: confirm modal
   const askConfirm = (title, message, onConfirm) => {
@@ -217,6 +267,21 @@ const paginated = useMemo(() => {
         const tx = await contract.cancelDispute(order.id);
         await tx.wait();
         pushToast?.("success", "Dispute cancelled");
+        
+        const res = await fetch("/api/somnia/publish", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+        eventName: "DisputeCancelled",
+        payload: {
+        orderId: Number(order.id)
+     }
+  }),
+});
+
+const data = await res.json();
+console.log(data);
+
       } catch (err) {
         console.log("cancelDispute err", err);
         pushToast?.("error", "Failed to cancel dispute");
@@ -617,6 +682,9 @@ const paginated = useMemo(() => {
       onClose={() => closeReceiptModal()}
       order={selectedOrder}
     />
+
+    <SomniaDisputeListener onEvent={handleSomniaEvent} />
+
     </div>
   );
 }

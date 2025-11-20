@@ -63,7 +63,7 @@ export default function AnalyticsTab({ darkMode = false, TOKEN_LOGOS = {} }) {
   const { address: userAddress, caipAddress, isConnected } = useAppKitAccount();
   const { walletProvider } = useAppKitProvider("eip155");
   const [viewMode, setViewMode] = useState("global"); // "global" or "buyer" or "seller"
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState(null);
   const [listings, setListings] = useState([]);
   const [allListingsData, setAllListingsData] = useState([])
@@ -86,7 +86,7 @@ export default function AnalyticsTab({ darkMode = false, TOKEN_LOGOS = {} }) {
   const [showInsights, setShowInsights] = useState(false);
 
   const [refresh, setRefresh] = useState(false)
-    async function loadAll() {
+    const loadAll = async () => {
           if (refresh === false) {
           setLoading(true)
         }
@@ -221,6 +221,19 @@ else {
     const sc = await contract.storeCount();
     setStoreCount(BigInt(sc));
 }
+
+    // Real-time event listeners
+    contract.on("ListingCreated", loadAll);
+    contract.on("OrderRequested", loadAll);
+    contract.on("ShippingSet", loadAll);
+    contract.on("DeliveryConfirmed", loadAll);
+    contract.on("DisputeOpened", loadAll);
+    contract.on("DisputeCancelled", loadAll);
+    contract.on("DisputeResolved", loadAll);
+    contract.on("ReceiptMinted", loadAll);
+    return () => {
+      contract.removeAllListeners();
+    };
       } catch (err) {
         setErrors(err?.message);
       } finally {
@@ -230,12 +243,7 @@ else {
 
     useEffect(() => {
     loadAll();
-    setRefresh(true)
-      // update every 120s
-    const interval = setInterval(() => {
-      loadAll();
-    }, 120000)
-    return () => clearInterval(interval);
+    setRefresh(true);
   }, [walletProvider, viewMode]);
 
   useEffect(() => {
